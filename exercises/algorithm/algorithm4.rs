@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -43,20 +42,50 @@ impl<T> BinarySearchTree<T>
 where
     T: Ord,
 {
-
     fn new() -> Self {
         BinarySearchTree { root: None }
     }
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.root.is_none()
+        {
+            self.root = Some(Box::new(TreeNode::new(value)));
+        }
+        else
+        {
+            self.root.as_mut().unwrap().insert(value);
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        if(self.root.is_none()) {return false;}
+        let mut node = self.root.as_ref().unwrap();
+        loop
+        {
+            if node.value > value
+            {
+                match node.left
+                {
+                    Some(ref next) => {
+                        node = next
+                    },
+                    None => { return false; }
+                }
+            }
+            else if node.value < value
+            {
+                match node.right
+                {
+                    Some(ref next) => {
+                        node = next
+                    },
+                    None => { return false; }
+                }
+            }
+            else { return true; }
+        }
     }
 }
 
@@ -66,7 +95,22 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.value > value
+        {
+            match self.left
+            {
+                Some(ref mut node) => node.insert(value),
+                None => self.left = Some(Box::new(TreeNode::new(value)))
+            }
+        }
+        else if self.value < value
+        {
+            match self.right
+            {
+                Some(ref mut node) => node.insert(value),
+                None => self.right = Some(Box::new(TreeNode::new(value)))
+            }
+        }
     }
 }
 
